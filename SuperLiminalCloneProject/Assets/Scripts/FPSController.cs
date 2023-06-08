@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Simple FPS controller created by Sebastian Lague
+/// https://github.com/SebLague/Portals/blob/master/Assets/Scripts/Demo/FPSController.cs
+/// </summary>
 public class FPSController : MonoBehaviour
 {
 

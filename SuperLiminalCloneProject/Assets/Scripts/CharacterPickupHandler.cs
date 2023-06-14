@@ -16,6 +16,7 @@ public class CharacterPickupHandler : MonoBehaviour
     [SerializeField] private float _pickupDistance;
 
     [SerializeField] private GameObject _currentPickedUpObject;
+    private Vector3 _savedScale = new Vector3();
     /// <summary>
     /// Cast a ray from the center of the creen, look if it hit an object the player can pick up
     /// and pick up the object.
@@ -32,6 +33,7 @@ public class CharacterPickupHandler : MonoBehaviour
              {
                  _currentPickedUpObject = ray.collider.gameObject;
                  _currentPickedUpObject.GetComponent<Rigidbody>().isKinematic = true;
+                 _savedScale = _currentPickedUpObject.transform.localScale;
              }
          }  
          else
@@ -41,19 +43,34 @@ public class CharacterPickupHandler : MonoBehaviour
          }
     }
 
- 
+    private void SetPickUpPosition()
+    {
+        RaycastHit ray;
+        
+        if(Physics.Raycast(_cam.transform.position,_cam.transform.forward, out ray, Mathf.Infinity,~_layers))
+        {
+            Debug.Log(ray.transform.name);
+            _currentPickedUpObject.transform.position = ray.point - _cam.transform.forward * (_currentPickedUpObject.transform.localScale.x);
+            //float desiredScale = 1 / ray.distance;
+            _currentPickedUpObject.transform.localScale = _savedScale / ray.distance;
+        }
+    }
 
     private void Update()
     {
-        PickUp();
+     
         if (_currentPickedUpObject != null)
         {
-            _currentPickedUpObject.transform.position  = _cam.transform.position + _cam.transform.forward * _pickupDistance;
+            SetPickUpPosition();
             if(Input.GetKeyUp(KeyCode.E))
             {
                 _currentPickedUpObject.GetComponent<Rigidbody>().isKinematic = false;
                 _currentPickedUpObject = null;
             }
+        }
+        else
+        {
+            PickUp();
         }
     }
 }

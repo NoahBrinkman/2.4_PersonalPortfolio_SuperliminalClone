@@ -50,9 +50,9 @@ public class CharacterPickupHandler : MonoBehaviour
         if(Physics.Raycast(_cam.transform.position,_cam.transform.forward, out ray, Mathf.Infinity,~_layers))
         {
             Debug.Log(ray.transform.name);
-            _currentPickedUpObject.transform.position = ray.point - _cam.transform.forward * (_currentPickedUpObject.transform.localScale.x);
+            _currentPickedUpObject.transform.position = ray.point - _cam.transform.forward * (_currentPickedUpObject.transform.localScale.x/4);
             //float desiredScale = 1 / ray.distance;
-            _currentPickedUpObject.transform.localScale = _savedScale / ray.distance;
+            _currentPickedUpObject.transform.localScale = _savedScale * (ray.distance/4);
         }
     }
 
@@ -65,6 +65,7 @@ public class CharacterPickupHandler : MonoBehaviour
             if(Input.GetKeyUp(KeyCode.E))
             {
                 _currentPickedUpObject.GetComponent<Rigidbody>().isKinematic = false;
+                _currentPickedUpObject.GetComponent<Rigidbody>().mass *= _currentPickedUpObject.transform.localScale.x;
                 _currentPickedUpObject = null;
             }
         }

@@ -19,6 +19,7 @@ public class CharacterPickupHandler : MonoBehaviour
     private Vector3 targetScale = new Vector3();
     private  float _savedScale =0f;
     private float _savedDistance = 0.0f;
+    private Vector3 hitOffset;
     /// <summary>
     /// Cast a ray from the center of the creen, look if it hit an object the player can pick up
     /// and pick up the object.
@@ -38,6 +39,7 @@ public class CharacterPickupHandler : MonoBehaviour
                  _savedScale = _currentPickedUpObject.transform.localScale.x;
                  targetScale = _currentPickedUpObject.transform.localScale;
                  _savedDistance = Vector3.Distance(transform.position, _currentPickedUpObject.transform.position);
+                 hitOffset = ray.collider.transform.InverseTransformPoint(ray.point); 
              }
          }  
          else
@@ -55,19 +57,21 @@ public class CharacterPickupHandler : MonoBehaviour
         {
             Debug.Log(ray.transform.name);
             Vector3 pos;
-            int i = 0;
-            do
-            {
-               pos = ray.point - _cam.transform.forward * i;
-               i++;
-            } while (Physics.OverlapBox(pos, _savedScale * targetScale, _currentPickedUpObject.transform.rotation)
-                         .Length > 0 && Vector3.Dot(pos, _cam.transform.position + _cam.transform.forward) > 0 && i <= 50);
-            _currentPickedUpObject.transform.position = pos;
+            pos = ray.point- _cam.transform.forward * _currentPickedUpObject.transform.localScale.x/2;
+     
             //float desiredScale = 1 / ray.distance;
             float scale =   Vector3.Distance(transform.position, pos)/_savedDistance ;
             targetScale = new Vector3(scale, scale, scale);
 
+            while (Physics.OverlapBox(pos, targetScale).Length > 0)
+            {
+                pos -= _cam.transform.forward * _currentPickedUpObject.transform.localScale.x / 2;
+                    scale =   Vector3.Distance(transform.position, pos)/_savedDistance ;
+                    targetScale = new Vector3(scale, scale, scale);
+            }
+
             _currentPickedUpObject.transform.localScale = _savedScale * targetScale;
+            _currentPickedUpObject.transform.position = pos ;
 
         }
     }
@@ -81,11 +85,10 @@ public class CharacterPickupHandler : MonoBehaviour
             if(Input.GetKeyUp(KeyCode.E))
             {
                 _currentPickedUpObject.GetComponent<Rigidbody>().isKinematic = false;
-                _currentPickedUpObject.GetComponent<Rigidbody>().mass *= _currentPickedUpObject.transform.localScale.x;
-                _currentPickedUpObject = null;
-                _savedScale =0;
+                _currentPickedUpObject =null;
+                _savedScale = 0;
                 targetScale = new Vector3();
-                _savedDistance =0;
+                _savedDistance = 0;
             }
         }
         else

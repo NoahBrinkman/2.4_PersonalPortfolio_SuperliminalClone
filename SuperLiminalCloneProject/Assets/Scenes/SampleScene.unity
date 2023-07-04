@@ -172,7 +172,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 25886729}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 5
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -724,9 +724,9 @@ MonoBehaviour:
   smoothMoveTime: 0
   jumpForce: 8
   gravity: 18
-  lockCursor: 1
+  lockCursor: 0
   mouseSensitivity: 10
-  pitchMinMax: {x: -40, y: 90}
+  pitchMinMax: {x: -75, y: 45}
   rotationSmoothTime: 0.1
   yaw: 0
   pitch: 0
@@ -743,14 +743,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _range: 10
-  _layers:
+  _pickupLayer:
     serializedVersion: 2
     m_Bits: 64
+  _placeLayers:
+    serializedVersion: 2
+    m_Bits: 51
   _cam: {fileID: 330585545}
   _image: {fileID: 1907135958}
-  _pickupDistance: 10
-  _offset: 0.5
-  _currentPickedUpObject: {fileID: 0}
 --- !u!114 &193093528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1349,7 +1349,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 819012786}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 0.5
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}

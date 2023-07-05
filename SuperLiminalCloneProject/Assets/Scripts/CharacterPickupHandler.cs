@@ -13,7 +13,8 @@ public class CharacterPickupHandler : MonoBehaviour
     [SerializeField] private LayerMask _pickupLayer;
     [SerializeField] private LayerMask _placeLayers;
     [SerializeField] private Camera _cam;
-    [SerializeField] private Image _image; 
+    [SerializeField] private Image _image;
+    private GameObject _highlitObject;
     private GameObject _currentPickedUpObject;
     private Vector3 targetScale = new Vector3();
     private  float _savedScale =0f;
@@ -32,6 +33,18 @@ public class CharacterPickupHandler : MonoBehaviour
          {
              Debug.Log("Hit");
              _image.color = new Color(1, 1, 1, 0);
+             if (_highlitObject == null)
+             {
+                 _highlitObject = ray.collider.gameObject;
+                     _highlitObject.layer = 7;
+             }
+             if (_highlitObject != ray.collider.gameObject)
+             {
+                 _highlitObject.layer = 6;
+                 _highlitObject = ray.collider.gameObject;
+                 _highlitObject.layer = 7;
+             }
+         
              if (Input.GetKeyDown(KeyCode.E) && _currentPickedUpObject == null)
              {
                  _currentPickedUpObject = ray.collider.gameObject;
@@ -47,6 +60,11 @@ public class CharacterPickupHandler : MonoBehaviour
          }  
          else
          {
+             if (_highlitObject != null)
+             {
+                 _highlitObject.layer = 6;
+                 _highlitObject = null;
+             }
              Debug.Log("!Hit");
              _image.color = new Color(1, 1, 1, 1);
          }

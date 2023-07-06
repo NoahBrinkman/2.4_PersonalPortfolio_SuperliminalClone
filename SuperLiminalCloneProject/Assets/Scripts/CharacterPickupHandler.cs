@@ -37,12 +37,25 @@ public class CharacterPickupHandler : MonoBehaviour
              {
                  _highlitObject = ray.collider.gameObject;
                      _highlitObject.layer = 7;
+                                     
+                     foreach (Transform o in _highlitObject.transform)
+                     {
+                         o.gameObject.layer = 7;
+                     }
              }
              if (_highlitObject != ray.collider.gameObject)
              {
                  _highlitObject.layer = 6;
+                 foreach (Transform o in _highlitObject.transform)
+                 {
+                     o.gameObject.layer = 6;
+                 }
                  _highlitObject = ray.collider.gameObject;
                  _highlitObject.layer = 7;
+                 foreach (Transform o in _highlitObject.transform)
+                 {
+                     o.gameObject.layer = 7;
+                 }
              }
          
              if (Input.GetKeyDown(KeyCode.E) && _currentPickedUpObject == null)
@@ -63,6 +76,10 @@ public class CharacterPickupHandler : MonoBehaviour
              if (_highlitObject != null)
              {
                  _highlitObject.layer = 6;
+                 foreach (Transform o in _highlitObject.transform)
+                 {
+                     o.gameObject.layer = 6;
+                 }
                  _highlitObject = null;
              }
              Debug.Log("!Hit");

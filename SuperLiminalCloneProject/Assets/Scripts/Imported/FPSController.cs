@@ -116,7 +116,6 @@ public class FPSController : MonoBehaviour
             mX = 0;
             mY = 0;
         }
-
         yaw += mX * mouseSensitivity;
         pitch -= mY * mouseSensitivity;
         pitch = Mathf.Clamp(pitch, pitchMinMax.x, pitchMinMax.y);

@@ -126,4 +126,10 @@ public class FPSController : MonoBehaviour
         cam.transform.localEulerAngles = Vector3.right * smoothPitch;
 
     }
+
+    public void AddToYaw(float newYaw)
+    {
+        yaw += newYaw;
+        smoothYaw += newYaw;
+    }
 }

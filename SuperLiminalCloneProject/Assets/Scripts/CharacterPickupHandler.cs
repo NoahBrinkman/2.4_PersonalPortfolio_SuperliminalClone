@@ -103,7 +103,7 @@ public class CharacterPickupHandler : MonoBehaviour
             float scale =   Vector3.Distance(transform.position, pos)/_savedDistance ;
             targetScale = new Vector3(scale, scale, scale);
             Vector3 newScale = _savedScale;
-            newScale.Scale(targetScale);
+            newScale.Scale(targetScale*2);
             int index = 0;
             while (Physics.OverlapBox(pos, newScale * offsetMultiplier, _currentPickedUpObject.transform.rotation).Length > 0 && index <= 50)
             {

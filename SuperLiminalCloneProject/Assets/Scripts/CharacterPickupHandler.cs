@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +11,7 @@ public class CharacterPickupHandler : MonoBehaviour
     [SerializeField] private LayerMask _placeLayers;
     [SerializeField] private Camera _cam;
     [SerializeField] private Image _image;
-    [SerializeField] private float offsetMultiplier = 1.1f;
+    [SerializeField] private float _offsetMultiplier = 1.1f;
     private GameObject _highlitObject;
     private GameObject _currentPickedUpObject;
     private Vector3 targetScale = new Vector3();
@@ -88,7 +85,13 @@ public class CharacterPickupHandler : MonoBehaviour
              _image.color = new Color(1, 1, 1, 1);
          }
     }
-
+    /// <summary>
+    /// Ignoring the picked up object, cast a ray directly forward, when it hits something determine the initial position.
+    /// Set a scale by dividing the distance currently by the saved distance (meaning in your view the size of the object shouldnt change).
+    /// See if an object would collide at the current position and scale,
+    /// if so then move the object back a little bit and repeat.
+    /// There is a buffer in place (the index) to make sure you dont get caught in an infinite loop.
+    /// </summary>
     private void SetPickUpPosition()
     {
         RaycastHit ray;
@@ -105,7 +108,7 @@ public class CharacterPickupHandler : MonoBehaviour
             Vector3 newScale = _savedScale;
             newScale.Scale(targetScale*2);
             int index = 0;
-            while (Physics.OverlapBox(pos, newScale * offsetMultiplier, _currentPickedUpObject.transform.rotation).Length > 0 && index <= 50)
+            while (Physics.OverlapBox(pos, newScale * _offsetMultiplier, _currentPickedUpObject.transform.rotation).Length > 0 && index <= 1000)
             {
                 index++;
                     pos -= _cam.transform.forward * .1f;
@@ -125,10 +128,11 @@ public class CharacterPickupHandler : MonoBehaviour
 
     private void Update()
     {
-     
+        //Logic for micing around a picked up object
         if (_currentPickedUpObject != null)
         {
             SetPickUpPosition();
+            //If you let go of E all saved values will get reset and the mass of the object will get fixed
             if(Input.GetKeyUp(KeyCode.E))
             {
                 _currentPickedUpObject.GetComponent<Rigidbody>().isKinematic = false;
@@ -149,6 +153,10 @@ public class CharacterPickupHandler : MonoBehaviour
         }
     }
 
+    
+    /// <summary>
+    /// Simple visual aid for the objects
+    /// </summary>
     private void OnDrawGizmos()
     {
         if (_currentPickedUpObject != null)

@@ -1,9 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// A relatively simplel class tahat allows me to call events upon entering a collider. 
+/// </summary>
 [RequireComponent(typeof(BoxCollider))]
 public class EventCollider : MonoBehaviour
 {

@@ -1,45 +1,64 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
+/// <summary>
+/// The pressure plate for puzzle 2.
+/// With a minimum and maximum mass the 
+/// </summary>
 public class PressurePlate : MonoBehaviour
 {
-    [SerializeField] private float minimumMass;
-    [SerializeField] private float maximumMass;
-    private float value;
-    private float endValue;
-    [SerializeField] private float RegistrationTime;
-    private float timer;
+    [FormerlySerializedAs("minimumMass")] [SerializeField] private float _minimumMass;
+    [FormerlySerializedAs("maximumMass")] [SerializeField] private float _maximumMass;
+    private float _value;
+    private float _endValue;
+    [FormerlySerializedAs("RegistrationTime")] [SerializeField] private float _registrationTime;
+    private float _timer;
 
-    [SerializeField] private UnityEvent OnWeightRegistrationComplete;
-    [SerializeField] private Image fillImage;
+    [FormerlySerializedAs("OnWeightRegistrationComplete")] [SerializeField] private UnityEvent _onWeightRegistrationComplete;
+    [FormerlySerializedAs("fillImage")] [SerializeField] private Image _fillImage;
+
+
+    private void Start()
+    {
+        _timer = 0;
+    }
+    /// <summary>
+    /// If a rigidbody enters the trigger, set its mass to the end value.
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Rigidbody>() is Rigidbody rb && rb != null)
         {
-            endValue = rb.mass;
+            _endValue = rb.mass;
                 
         }
     }
-
+    /// <summary>
+    /// If something exits the trigger, reset the values of the pressure plate.
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerExit(Collider other)
     {
-        endValue = 0;
-        value = 0;
-        fillImage.fillAmount = 0;
+        _endValue = 0;
+        _value = 0;
+        _fillImage.fillAmount = 0;
     }
-
+    
+    /// <summary>
+    /// Lerp a value between 0 and the end value by time and then fill an image for visual clarity.
+    /// </summary>
     private void Update()
     {
-        timer += Time.deltaTime;
-        value = Mathf.Lerp(0, endValue / maximumMass, timer / RegistrationTime);
-        fillImage.fillAmount = value;
-        if (timer >= RegistrationTime && endValue >= minimumMass && endValue <= maximumMass)
+        _timer += Time.deltaTime;
+        _value = Mathf.Lerp(0, _endValue / _maximumMass, _timer / _registrationTime);
+        _fillImage.fillAmount = _value;
+        if (_timer >= _registrationTime && _endValue >= _minimumMass && _endValue <= _maximumMass)
         {
-            OnWeightRegistrationComplete?.Invoke();
+            _onWeightRegistrationComplete?.Invoke();
         }
     }
 }

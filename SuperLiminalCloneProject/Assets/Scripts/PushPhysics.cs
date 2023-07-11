@@ -1,11 +1,16 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// A character controller does not apply physics naturally to objects, meaning this needs to be done manually.
+/// This class applies force to objects the player hits.
+/// </summary>
 public class PushPhysics : MonoBehaviour
 {
     [SerializeField] private float _force;
+    /// <summary>
+    /// Upon hitting an object apply appropriate force to it
+    /// </summary>
+    /// <param name="hit"> The object the player hit</param>
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         Rigidbody rb = hit.rigidbody;
